@@ -3,7 +3,7 @@
 #   bash scripts/download.sh                # the world models the experiments use: p_ff, p_ffpad2, p_ffc, p_ff_100m/30m/10m
 #   bash scripts/download.sh base replay    # sai_ctx2 with its optimizer state, and the replay streams (for scripts/pretrain.sh)
 #   bash scripts/download.sh runs           # every trained arm of the original grid (to rerun only the evals and monitors)
-# Needs the GitHub CLI (gh auth login) while the repository is private; with a public one, plain curl works.
+# Uses the GitHub CLI if installed, otherwise curl.
 set -euo pipefail
 REPO=MJ10/scientist-ai-math
 TAG=v1
