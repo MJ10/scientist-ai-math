@@ -55,8 +55,9 @@ def main():
             continue
         form = max(["skip_of_cheats", "decoupled_of_cheats", "motivated_false_of_cheats", "invented_of_cheats"],
                    key=lambda k: sum(x.get(k, 0) or 0 for x in b))
-        rows.append([label, span([x["cheat_wrong_key"] for x in b], pct=True), form.removesuffix("_of_cheats"),
-                     span([x[form] for x in b], pct=True), span([x["truth_acc"] for x in b])])
+        cheats = max(x["cheat_wrong_key"] for x in b) >= 0.01
+        rows.append([label, span([x["cheat_wrong_key"] for x in b], pct=True), form.removesuffix("_of_cheats") if cheats else "-",
+                     span([x[form] for x in b], pct=True) if cheats else "-", span([x["truth_acc"] for x in b])])
     print("Table 1. Copied: share of wrong-key items answered with the key (%); form: the most common kind of cheat and its "
           "share of the cheats (%); accuracy against the truth.")
     table(["policy / grader checks", "copied", "form", "share", "accuracy"], rows)

@@ -47,7 +47,7 @@ From the original runs (200 held-out problems × 8 samples, 2 seeds per arm).
 
 **The Scientist AI stays honest.** Its own answers copy a wrong key 4% of the time (untrained p: 9%). At its verdict
 node it gives a wrong key P(true) = 0.001–0.002, against 0.78 for right keys. Its estimate of p(Y | X) picks the
-true answer among 4 candidates on 99.5–100% of problems; p's direct guess, with no reasoning, gets 0.73. (The estimate
+true answer among 4 candidates on 100% of problems; p's direct guess, with no reasoning, gets 0.73. (The estimate
 scores a candidate set with 32 sampled solutions per candidate; its single-sample answer accuracy is 0.87, below
 R-true's 0.997.)
 
@@ -65,14 +65,15 @@ The chain-of-thought monitor (p reading the agent's own solution) passes falsifi
 derivation does imply the wrong answer.
 
 **It needs a world model that can solve the problems, not one that can guess the answer.** Weaker world models
-(continued pretraining on fewer tokens), each as an untrained estimator (q = p), on the cheating policies:
+(continued pretraining on fewer tokens), each as an untrained estimator (q = p), on the cheating policies (graders 1–3
+and 5):
 
 | CPT tokens | p's own accuracy | Flagged (%) | False alarms (%) | AUROC | Direct p AUROC |
 |---:|---:|---:|---:|---:|---:|
-| 0.5B | 0.89 | 100 | 0 | 1.00 | 0.78–0.86 |
-| 0.1B | 0.84 | 98 | ≤ 1 | 1.00 | 0.41–0.48 |
-| 0.03B | 0.59 | 89–91 | ≤ 4 | 0.98–0.99 | 0.37–0.46 |
-| 0.01B | 0.18 | 3–20 | 1–34 | 0.54–0.57 | 0.43–0.49 |
+| 0.5B | 0.89 | 100 | 0 | 1.00 | 0.85–0.86 |
+| 0.1B | 0.84 | 98 | 0 | 1.00 | 0.41 |
+| 0.03B | 0.59 | 89–90 | 0 | 0.99 | 0.37 |
+| 0.01B | 0.18 | 3 | 1 | 0.57–0.58 | 0.43 |
 
 ## Setup
 
@@ -91,7 +92,7 @@ with every world model the experiments use. Rebuilding the world models from the
 ## Reproducing
 
 ```bash
-bash scripts/grid.sh            # 22 runs: every arm x 2 seeds, each trained then evaluated (~30 GPU-hours)
+bash scripts/grid.sh            # 21 runs: every arm x 2 seeds, each trained then evaluated (~35 GPU-hours)
 bash scripts/monitor.sh         # the Scientist AI as a monitor of the RL policies (Table 2)
 bash scripts/monitor.sh ladder  # the weaker world models as monitors (Table 3)
 python tables.py                # the tables above, from $SAI_DIR/runs/*/gfn_evals.jsonl

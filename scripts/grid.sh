@@ -1,7 +1,7 @@
 #!/bin/bash
-# Every arm of the experiments, 2 seeds each: 22 training runs, each followed by its eval. With SLURM each run is its
+# Every arm of the experiments, 2 seeds each: 21 training runs, each followed by its eval. With SLURM each run is its
 # own job (extra sbatch flags from $SBATCH_ARGS, e.g. SBATCH_ARGS="--partition=long"); without it, they run one after
-# another on this machine's GPU (~30 GPU-hours in all).
+# another on this machine's GPU (~35 GPU-hours in all).
 #   bash scripts/grid.sh
 # Then: bash scripts/monitor.sh; bash scripts/monitor.sh ladder; python tables.py
 set -euo pipefail
@@ -18,5 +18,5 @@ for seed in 0 1; do
     done
     # the step checker again, from the world model whose solutions sometimes end with an identity step
     run p_ffpad2 pad2 rcv $seed
-    run p_ffpad2 pad2 e $seed
 done
+run p_ffpad2 pad2 e 0  # its estimator, for the monitor

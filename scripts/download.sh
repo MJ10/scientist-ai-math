@@ -9,11 +9,11 @@ REPO=MJ10/scientist-ai-math
 TAG=v1
 DIR=${SAI_DIR:-work}
 WORLD="p_ff p_ffpad2 p_ffc p_ff_100m p_ff_30m p_ff_10m"
-REPLAY="fineweb_edu_ctx wikipedia_ctx python_ctx facts fact_chains"
-RUNS=""
+REPLAY="fineweb_edu_ctx:2 wikipedia_ctx:2 python_ctx:1 facts:1 fact_chains:1"  # <source>:<number of files>
+RUNS="e_kfpad2_s0"
 for s in 0 1; do
     for a in e r rsw rcl rcv rtrue rtb rtbsw rtbcl; do RUNS="$RUNS ${a}_kf_s$s"; done
-    RUNS="$RUNS rcv_kfpad2_s$s e_kfpad2_s$s"
+    RUNS="$RUNS rcv_kfpad2_s$s"
 done
 get() {  # <asset> <destination>
     [ -f "$2" ] && { echo "have $2"; return; }
@@ -30,7 +30,12 @@ for what in ${@:-world}; do
     case $what in
         world)  for r in $WORLD; do get $r.npz $DIR/runs/$r/ckpt.npz; done ;;
         base)   get sai_ctx2.npz $DIR/runs/sai_ctx2/ckpt.npz ;;
-        replay) for s in $REPLAY; do get replay_$s.bin $DIR/tokens/v2/$s/train/0000.bin; done ;;
+        replay) for sn in $REPLAY; do
+                    s=${sn%:*}
+                    for ((i = 0; i < ${sn#*:}; i++)); do
+                        f=$(printf %04d $i); get replay_${s}_$f.bin $DIR/tokens/v2/$s/train/$f.bin
+                    done
+                done ;;
         runs)   for r in $RUNS; do get $r.npz $DIR/runs/$r/ckpt.npz; done ;;
         *) echo "unknown: $what (world | base | replay | runs)"; exit 1 ;;
     esac

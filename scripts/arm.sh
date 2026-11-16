@@ -14,7 +14,7 @@ POL="--n_items=16 --k=16"  # (policies: 16 problems x 16 samples per step)
 TB="--objective=tb_vargrad --lr_scale=0.01 --explore_temp=1.2"
 GRPO="--objective=grpo --lr_scale=0.05 $POL"
 case $ARM in
-    e)     steps=300;  args="--verdict=1 --alt_frac=0 $TB" ;;
+    e)     steps=300;  args="--verdict=1 $TB" ;;
     r)     steps=300;  args="--target=reward $GRPO" ;;
     rsw)   steps=300;  args="--target=reward --show_work=3 $GRPO" ;;
     rcl)   steps=1000; args="--target=reward --show_work=3 --check_last=1 $GRPO" ;;
