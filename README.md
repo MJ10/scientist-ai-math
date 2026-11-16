@@ -118,6 +118,13 @@ The new data (free-form solutions, verdicts on sources' claims, grader logs) is 
 `facts.py`, deterministically. The replay half comes from the released streams, which start exactly where sai_ctx2's
 pretraining stopped.
 
+**Checked against the original research code**, on the released checkpoints: evals give the same numbers (all 165,
+monitors included), the first training steps of the Scientist AI and of GRPO match (losses identical, grad norms to
+1e-6), `data.py` writes byte-identical token files, and continued pretraining from the released sai_ctx2 and replay
+streams follows the original losses step by step (to 3–4 digits). Full runs weren't repeated end to end: small
+floating-point differences can compound over hundreds of steps, so expect retrained arms to match the tables up to
+seed-level variation.
+
 ## Code
 
 | file | what |
